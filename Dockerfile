@@ -14,4 +14,4 @@ ENV PORT=8000
 EXPOSE 8000
 
 # Run the server
-CMD ["python3", "app/main.py"]
+CMD ["python3", "-m", "app.main"]

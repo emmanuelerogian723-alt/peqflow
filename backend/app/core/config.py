@@ -62,7 +62,7 @@ class Settings:
     
     # Runtime
     RUNNER_PORT: int = int(os.getenv("RUNNER_PORT", "8000"))
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///peqflowflow.db")
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///peqflow.db")
     
     # CORS
     CORS_ORIGINS: List[str] = field(default_factory=lambda: ["*"])
