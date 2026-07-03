@@ -1,1 +1,1 @@
-from .server import FlowMindMCPServer
+from .server import PeqMCPServer

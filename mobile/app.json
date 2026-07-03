@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "FlowMind",
-    "slug": "flowmind",
+    "name": "Peq",
+    "slug": "peq",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -11,8 +11,8 @@
     "extra": {
       "apiBase": "http://localhost:8000/api/v1"
     },
-    "ios": { "supportsTablet": true, "bundleIdentifier": "com.flowmind.app" },
-    "android": { "package": "com.flowmind.app" },
+    "ios": { "supportsTablet": true, "bundleIdentifier": "com.peq.app" },
+    "android": { "package": "com.peq.app" },
     "plugins": ["expo-notifications"]
   }
 }

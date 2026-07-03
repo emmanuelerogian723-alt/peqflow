@@ -77,7 +77,7 @@ class ShopifyIntegration(BaseIntegration):
     
     def _create_discount(self, params: Dict, context: Dict) -> ExecutionResult:
         try:
-            code = params.get("code", "FLOWMIND10")
+            code = params.get("code", "PEQ10")
             percentage = params.get("percentage", 10)
             payload = {
                 "discount_code": {

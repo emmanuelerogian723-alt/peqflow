@@ -6,7 +6,7 @@ let mainWindow;
 let backendProcess;
 
 function startBackend() {
-    // Start the FlowMind Python backend
+    // Start the Peq Python backend
     const backendPath = path.join(__dirname, '..', 'backend', 'app', 'main.py');
     backendProcess = spawn('python3', [backendPath], {
         env: { ...process.env, PORT: '8765' },
@@ -28,7 +28,7 @@ function createWindow() {
         height: 800,
         minWidth: 900,
         minHeight: 600,
-        title: 'FlowMind — AI Automation Engine',
+        title: 'Peq — AI Automation Engine',
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
@@ -46,7 +46,7 @@ function createWindow() {
     
     // Update API base to point to local backend
     mainWindow.webContents.executeJavaScript(`
-        window.FLOWMIND_API = 'http://localhost:8765/api/v1';
+        window.PEQ_API = 'http://localhost:8765/api/v1';
     `);
     
     mainWindow.on('closed', () => {

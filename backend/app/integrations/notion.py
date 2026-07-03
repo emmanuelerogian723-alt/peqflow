@@ -44,7 +44,7 @@ class NotionIntegration(BaseIntegration):
             properties = params.get("properties", {})
             if not properties:
                 # Auto-build from context
-                title = context.get("customer_name", context.get("event_type", "New FlowMind Entry"))
+                title = context.get("customer_name", context.get("event_type", "New Peq Entry"))
                 properties = {
                     "Name": {"title": [{"text": {"content": title}}]}
                 }

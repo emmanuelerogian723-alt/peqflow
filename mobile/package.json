@@ -1,7 +1,7 @@
 {
-  "name": "flowmind-mobile",
+  "name": "peq-mobile",
   "version": "1.0.0",
-  "description": "FlowMind mobile companion - monitor and manage your automations on the go",
+  "description": "Peq mobile companion - monitor and manage your automations on the go",
   "main": "App.js",
   "scripts": {
     "start": "expo start",

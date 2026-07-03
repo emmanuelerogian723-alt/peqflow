@@ -1,7 +1,7 @@
 {
-  "name": "flowmind",
+  "name": "peq",
   "version": "1.0.0",
-  "description": "FlowMind - AI Automation Engine Desktop App",
+  "description": "Peq - AI Automation Engine Desktop App",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -11,8 +11,8 @@
     "build:linux": "electron-builder --linux"
   },
   "build": {
-    "appId": "com.flowmind.app",
-    "productName": "FlowMind",
+    "appId": "com.peq.app",
+    "productName": "Peq",
     "directories": { "output": "dist" },
     "files": ["main.js", "preload.js", "renderer/**"],
     "mac": {

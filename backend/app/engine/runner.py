@@ -1,5 +1,5 @@
 """
-FlowMind Runtime Engine
+Peq Runtime Engine
 Executes workflows step by step, passing context between steps.
 Handles delays, conditions, error retries, and logging.
 """
@@ -20,7 +20,7 @@ from ..core.config import settings
 class RuntimeEngine:
     """Executes workflows and manages their lifecycle."""
     
-    def __init__(self, db_path: str = "flowmind.db"):
+    def __init__(self, db_path: str = "peq.db"):
         self.db_path = db_path
         self.active_workflows: Dict[str, Workflow] = {}
         self._init_db()
@@ -330,4 +330,4 @@ class RuntimeEngine:
 
 
 # Global engine instance
-engine = RuntimeEngine(os.getenv("FLOWMIND_DB_PATH", "flowmind.db"))
+engine = RuntimeEngine(os.getenv("PEQ_DB_PATH", "peq.db"))

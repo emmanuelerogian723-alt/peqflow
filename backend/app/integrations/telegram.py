@@ -39,7 +39,7 @@ class TelegramIntegration(BaseIntegration):
             chat_id = params.get("chat_id") or context.get("telegram_chat_id", "")
             message = params.get("message", "")
             if not message:
-                message = f"FlowMind Alert: {context.get('event_type', 'trigger fired')}"
+                message = f"Peq Alert: {context.get('event_type', 'trigger fired')}"
                 if context.get("amount"):
                     message += f"\nAmount: {context['amount']}"
                 if context.get("customer_name"):

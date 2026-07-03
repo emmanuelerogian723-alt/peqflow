@@ -43,7 +43,7 @@ class SlackIntegration(BaseIntegration):
             message = params.get("message", "")
             if not message:
                 # Build from context
-                message = f"FlowMind Alert: {context.get('event_type', 'trigger fired')}"
+                message = f"Peq Alert: {context.get('event_type', 'trigger fired')}"
                 if context.get("customer_name"):
                     message += f" | Customer: {context['customer_name']}"
                 if context.get("amount"):
@@ -62,7 +62,7 @@ class SlackIntegration(BaseIntegration):
     def _send_dm(self, params: Dict, context: Dict) -> ExecutionResult:
         try:
             user = params.get("user", "")
-            message = params.get("message", "FlowMind notification")
+            message = params.get("message", "Peq notification")
             # Open DM channel first
             dm_resp = httpx.post(f"{self.BASE_URL}/conversations.open",
                 json={"users": user},
@@ -84,7 +84,7 @@ class SlackIntegration(BaseIntegration):
     
     def _create_channel(self, params: Dict, context: Dict) -> ExecutionResult:
         try:
-            name = params.get("name", "flowmind-alerts")
+            name = params.get("name", "peq-alerts")
             resp = httpx.post(f"{self.BASE_URL}/conversations.create",
                 json={"name": name},
                 headers=self._get_headers(), timeout=15)

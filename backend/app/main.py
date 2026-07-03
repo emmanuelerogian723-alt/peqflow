@@ -1,5 +1,5 @@
 """
-FlowMind Backend Server
+Peq Backend Server
 FastAPI application serving the automation engine, API, and dashboard.
 """
 import os

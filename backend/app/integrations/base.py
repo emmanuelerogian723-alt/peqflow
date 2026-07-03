@@ -1,5 +1,5 @@
 """
-FlowMind Integration Base
+Peq Integration Base
 Base class for all integrations. Each integration handles its own API calls.
 """
 from typing import Dict, Any, Optional
@@ -17,7 +17,7 @@ class ExecutionResult:
 
 
 class BaseIntegration:
-    """Base class for all FlowMind integrations."""
+    """Base class for all Peq integrations."""
     name: str = "base"
     display_name: str = "Base"
     

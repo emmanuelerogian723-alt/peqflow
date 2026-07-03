@@ -1,6 +1,6 @@
 """
-FlowMind MCP Server
-Exposes FlowMind's automation capabilities via the Model Context Protocol.
+Peq MCP Server
+Exposes Peq's automation capabilities via the Model Context Protocol.
 This allows Claude (and any MCP-compatible AI assistant) to:
 1. Create automations from natural language
 2. List and manage existing workflows
@@ -24,15 +24,15 @@ from app.engine.runner import engine
 from app.core.config import AVAILABLE_INTEGRATIONS, get_enabled_integrations
 
 
-class FlowMindMCPServer:
-    """MCP server that exposes FlowMind automation tools."""
+class PeqMCPServer:
+    """MCP server that exposes Peq automation tools."""
     
     def __init__(self):
         self.tools = self._define_tools()
         self.resources = self._define_resources()
     
     def _define_tools(self) -> List[Dict]:
-        """Define all MCP tools that FlowMind exposes."""
+        """Define all MCP tools that Peq exposes."""
         return [
             {
                 "name": "create_automation",
@@ -211,13 +211,13 @@ class FlowMindMCPServer:
         """Define MCP resources."""
         return [
             {
-                "uri": "flowmind://integrations",
+                "uri": "peq://integrations",
                 "name": "Available Integrations",
-                "description": "List of all integrations FlowMind can connect to",
+                "description": "List of all integrations Peq can connect to",
                 "mimeType": "application/json"
             },
             {
-                "uri": "flowmind://capabilities",
+                "uri": "peq://capabilities",
                 "name": "Integration Capabilities",
                 "description": "Full registry of what each integration can do",
                 "mimeType": "application/json"
@@ -322,7 +322,7 @@ class FlowMindMCPServer:
     
     async def handle_resource_read(self, uri: str) -> str:
         """Handle a resource read request."""
-        if uri == "flowmind://integrations":
+        if uri == "peq://integrations":
             enabled = get_enabled_integrations()
             return json.dumps({
                 "integrations": [
@@ -330,7 +330,7 @@ class FlowMindMCPServer:
                     for k, v in AVAILABLE_INTEGRATIONS.items()
                 ]
             }, indent=2)
-        elif uri == "flowmind://capabilities":
+        elif uri == "peq://capabilities":
             return json.dumps(get_all_capabilities(), indent=2)
         return json.dumps({"error": "Unknown resource"})
     
@@ -351,7 +351,7 @@ class FlowMindMCPServer:
                         "resources": {"subscribe": False, "listChanged": False}
                     },
                     "serverInfo": {
-                        "name": "flowmind",
+                        "name": "peq",
                         "version": "1.0.0",
                     }
                 }
@@ -430,5 +430,5 @@ class FlowMindMCPServer:
 
 
 if __name__ == "__main__":
-    server = FlowMindMCPServer()
+    server = PeqMCPServer()
     server.run()

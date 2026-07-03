@@ -58,7 +58,7 @@ class WhatsAppIntegration(BaseIntegration):
                     name = context.get("customer_name", "there")
                     message = f"Hi {name}, just following up! Are you happy with your purchase? Let us know if you need anything."
                 else:
-                    message = context.get("message", "Hello from FlowMind!")
+                    message = context.get("message", "Hello from Peq!")
             
             payload = {
                 "messaging_product": "whatsapp",

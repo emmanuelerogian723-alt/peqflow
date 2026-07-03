@@ -1,5 +1,5 @@
 """
-FlowMind Core Configuration
+Peq Core Configuration
 Central settings for the automation engine, integrations, and runtime.
 """
 import os
@@ -20,10 +20,10 @@ class IntegrationConfig:
 @dataclass
 class Settings:
     # Core
-    APP_NAME: str = "FlowMind"
+    APP_NAME: str = "Peq"
     APP_VERSION: str = "1.0.0"
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
-    SECRET_KEY: str = os.getenv("FLOWMIND_SECRET_KEY", "dev-secret-change-me")
+    SECRET_KEY: str = os.getenv("PEQ_SECRET_KEY", "dev-secret-change-me")
     
     # AI Engine
     GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
@@ -58,11 +58,11 @@ class Settings:
     
     # MCP Server
     MCP_SERVER_PORT: int = int(os.getenv("MCP_SERVER_PORT", "8765"))
-    MCP_AUTH_TOKEN: str = os.getenv("MCP_AUTH_TOKEN", "flowmind-mcp-auth-dev")
+    MCP_AUTH_TOKEN: str = os.getenv("MCP_AUTH_TOKEN", "peq-mcp-auth-dev")
     
     # Runtime
     RUNNER_PORT: int = int(os.getenv("RUNNER_PORT", "8000"))
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///flowmind.db")
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///peq.db")
     
     # CORS
     CORS_ORIGINS: List[str] = field(default_factory=lambda: ["*"])

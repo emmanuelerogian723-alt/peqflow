@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: flowmind
+    name: peq
     runtime: docker
     plan: free
     dockerfilePath: ./Dockerfile

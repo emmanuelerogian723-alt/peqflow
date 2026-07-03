@@ -1,5 +1,5 @@
 """
-FlowMind API Routes
+Peq API Routes
 All REST endpoints for workflow management, execution, and integration testing.
 """
 import json

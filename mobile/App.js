@@ -84,7 +84,7 @@ function CreateScreen({ navigation }) {
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
         <Text style={styles.heroTitle}>Describe your automation</Text>
-        <Text style={styles.heroSub}>Type what you want to automate. FlowMind builds it.</Text>
+        <Text style={styles.heroSub}>Type what you want to automate. Peq builds it.</Text>
         
         <TextInput
           style={styles.input}

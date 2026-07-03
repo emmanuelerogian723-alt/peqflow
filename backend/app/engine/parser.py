@@ -1,5 +1,5 @@
 """
-FlowMind Automation Parser
+Peq Automation Parser
 Converts natural language descriptions into structured automation workflows.
 
 User says: "When someone pays on Paystack, send them a WhatsApp receipt and add to Google Sheets"
