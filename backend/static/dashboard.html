@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlowMind - AI Automation Engine</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a0f;
+            --surface: #13131f;
+            --surface2: #1a1a2e;
+            --border: #2a2a3e;
+            --text: #e4e4ef;
+            --muted: #7a7a9e;
+            --accent: #6c5ce7;
+            --accent2: #00cec9;
+            --success: #00b894;
+            --danger: #e17055;
+            --warning: #fdcb6e;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        
+        /* Topbar */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .logo span { font-weight: 300; color: var(--muted); }
+        .nav { display: flex; gap: 8px; }
+        .nav-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--muted);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .nav-btn:hover { color: var(--text); border-color: var(--accent); }
+        .nav-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+        
+        /* Layout */
+        .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+        
+        /* Hero / Create section */
+        .hero {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .hero h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+        .hero h1 .grad {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero p { color: var(--muted); font-size: 16px; margin-bottom: 24px; }
+        
+        /* Parser input */
+        .parser-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .parser-input {
+            width: 100%;
+            min-height: 80px;
+            padding: 16px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 15px;
+            font-family: inherit;
+            resize: vertical;
+        }
+        .parser-input:focus { outline: none; border-color: var(--accent); }
+        .parser-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-primary:hover { background: #5b4bd5; transform: translateY(-1px); }
+        .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+        .btn-ghost:hover { color: var(--text); }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-success { background: var(--success); color: white; }
+        
+        /* Example chips */
+        .examples { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+        .chip {
+            padding: 6px 12px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: var(--muted);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .chip:hover { color: var(--text); border-color: var(--accent); }
+        
+        /* Workflow visual */
+        .workflow-visual {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            display: none;
+        }
+        .workflow-visual.show { display: block; }
+        .workflow-visual h3 { margin-bottom: 16px; font-size: 18px; }
+        .step-flow { display: flex; flex-direction: column; gap: 0; }
+        .step-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin: 0;
+        }
+        .step-card.trigger { border-left: 4px solid var(--accent2); }
+        .step-card.action { border-left: 4px solid var(--accent); }
+        .step-card.delay { border-left: 4px solid var(--warning); }
+        .step-card.condition { border-left: 4px solid var(--warning); }
+        .step-icon { font-size: 24px; }
+        .step-info { flex: 1; }
+        .step-type { font-size: 11px; text-transform: uppercase; color: var(--muted); }
+        .step-name { font-size: 15px; font-weight: 600; }
+        .step-desc { font-size: 12px; color: var(--muted); }
+        .step-arrow {
+            text-align: center;
+            color: var(--border);
+            font-size: 20px;
+            padding: 4px 0;
+        }
+        .workflow-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        
+        /* Workflow list */
+        .workflow-list { display: flex; flex-direction: column; gap: 12px; }
+        .wf-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .wf-card-info h4 { font-size: 15px; margin-bottom: 4px; }
+        .wf-card-info p { font-size: 13px; color: var(--muted); }
+        .wf-card-actions { display: flex; gap: 8px; }
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .status-active { background: rgba(0,184,148,0.2); color: var(--success); }
+        .status-draft { background: rgba(122,122,158,0.2); color: var(--muted); }
+        .status-paused { background: rgba(253,203,110,0.2); color: var(--warning); }
+        
+        /* Integrations */
+        .integ-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        .integ-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+        .integ-card .icon { font-size: 32px; margin-bottom: 8px; }
+        .integ-card .name { font-size: 14px; font-weight: 600; }
+        .integ-card .status { font-size: 12px; margin-top: 4px; }
+        .integ-card.enabled .status { color: var(--success); }
+        .integ-card.disabled .status { color: var(--muted); }
+        
+        /* Views */
+        .view { display: none; }
+        .view.active { display: block; }
+        
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 16px 24px;
+            background: var(--surface);
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            z-index: 999;
+            display: none;
+        }
+        .toast.show { display: block; }
+        .toast.success { border-color: var(--success); }
+        .toast.error { border-color: var(--danger); }
+        
+        /* Empty state */
+        .empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--muted);
+        }
+        .empty .icon { font-size: 48px; margin-bottom: 16px; }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <div class="logo">FlowMind <span>— AI Automation</span></div>
+        <div class="nav">
+            <button class="nav-btn active" onclick="switchView('create')">Create</button>
+            <button class="nav-btn" onclick="switchView('workflows')">My Flows</button>
+            <button class="nav-btn" onclick="switchView('integrations')">Integrations</button>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- CREATE VIEW -->
+        <div class="view active" id="view-create">
+            <div class="hero">
+                <h1>Describe your automation. <span class="grad">FlowMind builds it.</span></h1>
+                <p>Type what you want to automate in plain English. No code. No Zapier. Just describe it.</p>
+            </div>
+            
+            <div class="parser-box">
+                <textarea class="parser-input" id="nlInput" placeholder="Example: When someone pays on Paystack, send them a WhatsApp receipt and add them to Google Sheets"></textarea>
+                <div class="parser-actions">
+                    <button class="btn btn-primary" onclick="parseWorkflow()">Parse & Preview</button>
+                    <button class="btn btn-ghost" onclick="saveWorkflow()">Save & Deploy</button>
+                </div>
+                <div class="examples">
+                    <span class="chip" onclick="fillExample(0)">Payment receipt via WhatsApp</span>
+                    <span class="chip" onclick="fillExample(1)">Email to Notion + Slack</span>
+                    <span class="chip" onclick="fillExample(2)">Paystack + delayed follow-up</span>
+                    <span class="chip" onclick="fillExample(3)">Shopify order to team</span>
+                </div>
+            </div>
+            
+            <div class="workflow-visual" id="workflowVisual">
+                <h3>Preview</h3>
+                <div class="step-flow" id="stepFlow"></div>
+                <div class="workflow-actions">
+                    <button class="btn btn-success" onclick="saveWorkflow()">Save This Flow</button>
+                    <button class="btn btn-ghost" onclick="clearPreview()">Clear</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- WORKFLOWS VIEW -->
+        <div class="view" id="view-workflows">
+            <h2 style="margin-bottom: 20px;">My Automations</h2>
+            <div class="workflow-list" id="workflowList">
+                <div class="empty">
+                    <div class="icon">⚡</div>
+                    <p>No automations yet. Create one to get started.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- INTEGRATIONS VIEW -->
+        <div class="view" id="view-integrations">
+            <h2 style="margin-bottom: 20px;">Integrations</h2>
+            <div class="integ-grid" id="integGrid"></div>
+        </div>
+    </div>
+    
+    <div class="toast" id="toast"></div>
+    
+    <script>
+        const API = '/api/v1';
+        let currentWorkflow = null;
+        
+        const examples = [
+            'When someone pays on Paystack, send them a WhatsApp receipt and add them to Google Sheets',
+            'When I get an email from a new client, add them to Notion and send a Slack notification to my team',
+            'When a customer pays on Paystack, send a WhatsApp receipt, wait 3 days, send a WhatsApp follow-up asking if they are happy',
+            'When a new order comes in on Shopify, send a Slack notification to my team and create a task in Notion'
+        ];
+        
+        function fillExample(i) {
+            document.getElementById('nlInput').value = examples[i];
+        }
+        
+        function switchView(name) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('view-' + name).classList.add('active');
+            event.target.classList.add('active');
+            if (name === 'workflows') loadWorkflows();
+            if (name === 'integrations') loadIntegrations();
+        }
+        
+        function showToast(msg, type = 'success') {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = 'toast show ' + type;
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+        
+        async function parseWorkflow() {
+            const desc = document.getElementById('nlInput').value.trim();
+            if (!desc) { showToast('Type something first', 'error'); return; }
+            
+            try {
+                const resp = await fetch(API + '/workflows/parse', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({description: desc})
+                });
+                const data = await resp.json();
+                if (data.success) {
+                    currentWorkflow = data.workflow;
+                    renderWorkflow(data.workflow, data.validation);
+                    showToast('Workflow parsed successfully');
+                } else {
+                    showToast('Parse failed: ' + (data.detail || 'Unknown error'), 'error');
+                }
+            } catch (e) {
+                showToast('Error: ' + e.message, 'error');
+            }
+        }
+        
+        async function saveWorkflow() {
+            const desc = document.getElementById('nlInput').value.trim();
+            if (!desc) { showToast('Type something first', 'error'); return; }
+            
+            try {
+                const resp = await fetch(API + '/workflows/create', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({description: desc})
+                });
+                const data = await resp.json();
+                if (data.success) {
+                    currentWorkflow = data.workflow;
+                    renderWorkflow(data.workflow, data.validation);
+                    showToast('Workflow saved! ID: ' + data.workflow_id);
+                } else {
+                    showToast('Failed: ' + JSON.stringify(data.validation), 'error');
+                }
+            } catch (e) {
+                showToast('Error: ' + e.message, 'error');
+            }
+        }
+        
+        function renderWorkflow(wf, validation) {
+            const visual = document.getElementById('workflowVisual');
+            const flow = document.getElementById('stepFlow');
+            visual.classList.add('show');
+            flow.innerHTML = '';
+            
+            const icons = {
+                paystack: '💳', whatsapp: '💬', gmail: '📧', google_sheets: '📊',
+                slack: '🔔', notion: '📝', telegram: '✈️', shopify: '🛒', internal: '⚙️'
+            };
+            
+            wf.steps.forEach((step, i) => {
+                if (i > 0) {
+                    const arrow = document.createElement('div');
+                    arrow.className = 'step-arrow';
+                    arrow.textContent = '↓';
+                    flow.appendChild(arrow);
+                }
+                const card = document.createElement('div');
+                card.className = 'step-card ' + step.step_type;
+                card.innerHTML = `
+                    <div class="step-icon">${icons[step.integration] || '⚡'}</div>
+                    <div class="step-info">
+                        <div class="step-type">${step.step_type} • ${step.integration}</div>
+                        <div class="step-name">${step.name}</div>
+                        <div class="step-desc">${step.description}</div>
+                    </div>
+                `;
+                flow.appendChild(card);
+            });
+        }
+        
+        function clearPreview() {
+            document.getElementById('workflowVisual').classList.remove('show');
+            document.getElementById('nlInput').value = '';
+            currentWorkflow = null;
+        }
+        
+        async function loadWorkflows() {
+            try {
+                const resp = await fetch(API + '/workflows');
+                const data = await resp.json();
+                const list = document.getElementById('workflowList');
+                
+                if (!data.workflows || data.workflows.length === 0) {
+                    list.innerHTML = '<div class="empty"><div class="icon">⚡</div><p>No automations yet. Create one to get started.</p></div>';
+                    return;
+                }
+                
+                list.innerHTML = data.workflows.map(w => `
+                    <div class="wf-card">
+                        <div class="wf-card-info">
+                            <h4>${w.name}</h4>
+                            <p>${w.description || ''}</p>
+                        </div>
+                        <div class="wf-card-actions">
+                            <span class="status-badge status-${w.status}">${w.status}</span>
+                            ${w.status === 'draft' ? `<button class="btn btn-success" onclick="activateWF('${w.id}')">Activate</button>` : ''}
+                            ${w.status === 'active' ? `<button class="btn btn-ghost" onclick="pauseWF('${w.id}')">Pause</button>` : ''}
+                            <button class="btn btn-danger" onclick="deleteWF('${w.id}')">Delete</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (e) {
+                showToast('Error loading workflows: ' + e.message, 'error');
+            }
+        }
+        
+        async function activateWF(id) {
+            const resp = await fetch(API + '/workflows/activate', {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({workflow_id: id})
+            });
+            const data = await resp.json();
+            if (data.success) { showToast('Workflow activated!'); loadWorkflows(); }
+        }
+        
+        async function pauseWF(id) {
+            const resp = await fetch(API + '/workflows/pause', {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({workflow_id: id})
+            });
+            const data = await resp.json();
+            if (data.success) { showToast('Workflow paused'); loadWorkflows(); }
+        }
+        
+        async function deleteWF(id) {
+            if (!confirm('Delete this workflow?')) return;
+            const resp = await fetch(API + '/workflows/' + id, {method: 'DELETE'});
+            const data = await resp.json();
+            if (data.success) { showToast('Deleted'); loadWorkflows(); }
+        }
+        
+        async function loadIntegrations() {
+            try {
+                const resp = await fetch(API + '/integrations');
+                const data = await resp.json();
+                const grid = document.getElementById('integGrid');
+                grid.innerHTML = data.integrations.map(i => `
+                    <div class="integ-card ${i.enabled ? 'enabled' : 'disabled'}">
+                        <div class="icon">${i.icon}</div>
+                        <div class="name">${i.display_name}</div>
+                        <div class="status">${i.enabled ? 'Connected' : 'Not configured'}</div>
+                    </div>
+                `).join('');
+            } catch (e) {
+                showToast('Error: ' + e.message, 'error');
+            }
+        }
+        
+        // Init
+        loadIntegrations();
+    </script>
+</body>
+</html>
